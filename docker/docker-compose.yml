@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    ports:
+      - "${PROJECT_IP:-127.0.0.1}:5432:5432"
+
+  php:
+    build:
+      context: ./php-fpm
+    depends_on:
+      - postgres
+    environment:
+      - APP_ENV=${APP_ENV}
+      - APP_SECRET=${APP_SECRET}
+      - DATABASE_URL=postgresql://${DATABASE_USER}:${DATABASE_PASSWORD}@postgres:5432/${DATABASE_NAME}
+      - XDEBUG_PORT=9003
+    volumes:
+      - ./../:/var/www
+
+  nginx:
+    build:
+      context: ./nginx
+    volumes:
+      - ./../:/var/www
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/sites/:/etc/nginx/sites-available
+      - ./nginx/conf.d/:/etc/nginx/conf.d
+    depends_on:
+      - php
+    ports:
+      - "80:80"
+      - "443:443"
+      - "9001:9001"
+
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+    volumes:
+      - ./redis/config/redis.conf:/redis.conf
+    command: [ "redis-server", "/redis.conf" ]
+    depends_on:
+      - php
