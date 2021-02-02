@@ -1,0 +1,161 @@
+nelmio_api_doc:
+    models: { use_jms: false }
+    documentation:
+        info:
+            title: Bookstore API
+            description: This is example of API!
+            version: 1.0.0
+        components:
+            schemas:
+                BookRequestTransfer:
+                    title: 'Book request transfer'
+                    description: 'Book request transfer'
+                    properties:
+                        title:
+                            title: title
+                            type: string
+                            example: "The Four Winds"
+                        author:
+                            title: author
+                            type: string
+                            example: "Kristin Hannah"
+                        cover:
+                            title: cover
+                            type: string
+                            example: "A Novel"
+                        description:
+                            title: description
+                            type: string
+                            example: "a powerful American epic about love and heroism and hope"
+                        status:
+                            title: status
+                            type: string
+                            example: "public"
+
+                BookResponseData:
+                    title: 'Book response format'
+                    description: 'Book response format'
+                    properties:
+                        type:
+                            title: type
+                            type: string
+                            example: "book"
+                        id:
+                            title: id
+                            type: string
+                            example: "418a694d-2619-452a-9bb5-fe1d33dc77db"
+                        attributes:
+                            title: attributes
+                            type: array
+                            items: { $ref: '#/components/schemas/BookResponseTransfer' }
+                BookResponseTransfer:
+                    title: 'Book respose format'
+                    description: 'Book respose format'
+                    properties:
+                        title:
+                            title: title
+                            type: string
+                            example: "The Four Winds"
+                        author:
+                            title: author
+                            type: string
+                            example: "Kristin Hannah"
+                        cover:
+                            title: cover
+                            type: string
+                            example: "A Novel"
+                        description:
+                            title: description
+                            type: string
+                            example: "a powerful American epic about love and heroism and hope"
+                        status:
+                            title: status
+                            type: string
+                            example: "public"
+                        createdAt:
+                            title: createdAt
+                            type: string
+                            example: "2021-01-02 15:31:00"
+                ErrorTransfer:
+                    title: 'Errors'
+                    description: 'Errors'
+                    properties:
+                        errors:
+                            title: errors
+                            type: array
+                            items: { }
+                            example:
+                                - "There is something wrong"
+
+                ValidationErrorTransfer:
+                    title: 'Validation Errors'
+                    description: 'Validation Errors'
+                    properties:
+                        type:
+                            title: type
+                            type: string
+                            example: "https://symfony.com/errors/validation"
+                        title:
+                            title: title
+                            type: string
+                            example: "Validation Failed"
+                        detail:
+                            title: detail
+                            type: string
+                            example: "username: This value should not be blank."
+                        violations:
+                            title: violations
+                            type: array
+                            items: { }
+                BooksList:
+                    title: 'Books list api response'
+                    description: 'Books list api response'
+                    properties:
+                        pagination:
+                            title: Pagination
+                            type: array
+                            items: { $ref: '#/components/schemas/PaginationResponseData' }
+                        data:
+                            title: data
+                            type: array
+                            items: { $ref: '#/components/schemas/BookResponseData' }
+
+                PaginationResponseData:
+                    title: 'Pagination'
+                    description: 'Pagination'
+                    properties:
+                        totalResult:
+                            title: totalResult
+                            type: integer
+                            example: 30
+                        firstPage:
+                            title: firstPage
+                            type: string
+                            example: "/users/?q=ovidiu&page[offset]=0&page[limit]=10"
+                        lastPage:
+                            title: lastPage
+                            type: string
+                            example: "/users/?q=ovidiu&page[offset]=20&page[limit]=10"
+                        previousPage:
+                            title: previousPage
+                            type: string
+                            example: "/users/?q=ovidiu&page[offset]=0&page[limit]=10"
+                        nextPage:
+                            title: nextPage
+                            type: string
+                            example: "/users/?q=ovidiu&page[offset]=10&page[limit]=10"
+                        page:
+                            title: page
+                            type: integer
+                            example: 1
+                        pagesCount:
+                            title: pagesCount
+                            type: integer
+                            example: 3
+                        maxPerPage:
+                            title: maxPerPage
+                            type: integer
+                            example: 10
+    areas: # to filter documented areas
+        path_patterns:
+            - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
