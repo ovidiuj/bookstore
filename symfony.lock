@@ -311,6 +311,9 @@
     "symfony/polyfill-php80": {
         "version": "v1.22.0"
     },
+    "symfony/polyfill-uuid": {
+        "version": "v1.22.0"
+    },
     "symfony/profiler-pack": {
         "version": "v1.0.5"
     },
@@ -361,6 +364,9 @@
     "symfony/security-http": {
         "version": "v5.2.2"
     },
+    "symfony/serializer": {
+        "version": "v5.2.2"
+    },
     "symfony/service-contracts": {
         "version": "v2.2.0"
     },
@@ -405,6 +411,9 @@
     },
     "symfony/twig-pack": {
         "version": "v1.0.1"
+    },
+    "symfony/uid": {
+        "version": "v5.2.2"
     },
     "symfony/validator": {
         "version": "4.3",

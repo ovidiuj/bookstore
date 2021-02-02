@@ -3,7 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\BookRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass=BookRepository::class)
@@ -12,12 +14,20 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Book
 {
+    public const STATUS_PUBLIC = 'public';
+    public const STATUS_NOT_PUBLIC = 'not-public';
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
+
+    /**
+     * @ORM\Column(type="uuid", unique=true)
+     */
+    private $uuid;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -42,16 +52,27 @@ class Book
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $status;
+    private $status = self::STATUS_PUBLIC;
 
     /**
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
 
+
+    public function __construct()
+    {
+        $this->uuid = Uuid::v4();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUuid(): ?string
+    {
+        return $this->uuid;
     }
 
     public function getTitle(): ?string
@@ -109,6 +130,10 @@ class Book
 
     public function setStatus(string $status): self
     {
+        if (!in_array($status, array(self::STATUS_PUBLIC, self::STATUS_NOT_PUBLIC))) {
+            throw new \InvalidArgumentException("Invalid status");
+        }
+
         $this->status = $status;
 
         return $this;
@@ -137,4 +162,5 @@ class Book
             $this->setCreatedAt(new \DateTime());
         }
     }
+
 }
