@@ -69,6 +69,8 @@ RUN pecl install xdebug \
 RUN apt-get -y install gcc make autoconf libc-dev pkg-config && \
     apt-get -y install libssl-dev
 
+RUN pecl install redis && docker-php-ext-enable redis
+
 WORKDIR /var/www
 
 EXPOSE 9000

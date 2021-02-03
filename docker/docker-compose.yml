@@ -15,6 +15,7 @@ services:
       context: ./php-fpm
     depends_on:
       - postgres
+      - redis
     environment:
       - APP_ENV=${APP_ENV}
       - APP_SECRET=${APP_SECRET}
@@ -22,6 +23,7 @@ services:
       - XDEBUG_PORT=9003
     volumes:
       - ./../:/var/www
+      - ./php-fpm/config/custom.ini:/usr/local/etc/php/conf.d/custom.ini
 
   nginx:
     build:
@@ -45,5 +47,3 @@ services:
     volumes:
       - ./redis/config/redis.conf:/redis.conf
     command: [ "redis-server", "/redis.conf" ]
-    depends_on:
-      - php
