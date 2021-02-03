@@ -75,7 +75,7 @@ Libraries:
   > ```
    
 * Open `http://localhost/doc/api` in your favorite web browser. This is the documentation for all API endpoints.
-* Open `http://localhost/book in your favorite web browser. This is web client interface.
+* Open `http://localhost/book` in your favorite web browser. This is web client interface.
 
 ## Usage example
 
