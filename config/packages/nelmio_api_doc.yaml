@@ -6,6 +6,12 @@ nelmio_api_doc:
             description: This is example of API!
             version: 1.0.0
         components:
+            securitySchemes:
+                Bearer:
+                    type: http
+                    scheme: bearer
+                    bearerFormat: JWT
+                    in: header
             schemas:
                 BookRequestTransfer:
                     title: 'Book request transfer'
@@ -107,6 +113,18 @@ nelmio_api_doc:
                             title: violations
                             type: array
                             items: { }
+                UnauthorizedErrorTransfer:
+                    title: 'Unauthorized Error'
+                    description: 'Unauthorized Error'
+                    properties:
+                        code:
+                            title: code
+                            type: integer
+                            example: 401
+                        message:
+                            title: message
+                            type: string
+                            example: "Expired JWT Token"
                 BooksList:
                     title: 'Books list api response'
                     description: 'Books list api response'
@@ -156,6 +174,190 @@ nelmio_api_doc:
                             title: maxPerPage
                             type: integer
                             example: 10
+
+        security:
+            - Bearer: [ ]
+
+        paths:
+            /api/login_check:
+                post:
+                    tags:
+                        - Login
+                    summary: Login into the api.
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    properties:
+                                        username:
+                                            type: string
+                                        password:
+                                            type: string
+                                    type: object
+                    responses:
+                        '200':
+                            description: OK
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        properties:
+                                            token:
+                                                type: string
+                        '401':
+                            description: Invalid credentials
+                        '400':
+                            description: Invalid JSON.
+                    security: [ ]
+
+            /api/v1/books:
+                get:
+                    tags:
+                        - Books
+                    summary: Search/List public books
+                    parameters:
+                        - name: q
+                          in: path
+                          required: false
+                          schema:
+                              type: string
+                        - name: page[offset]
+                          in: path
+                          required: false
+                          schema:
+                              type: integer
+                        - name: page[limit]
+                          in: path
+                          required: false
+
+                          schema:
+                              type: integer
+                        - name: sort
+                          in: path
+                          required: false
+                          schema:
+                              type: string
+                              example: 'title-asc'
+                    responses:
+                        '200':
+                            description: OK
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        $ref: '#/components/schemas/BooksList'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        $ref: '#/components/schemas/UnauthorizedErrorTransfer'
+                        '500':
+                            description: Internal Server Error.
+            /api/v1/book:
+                post:
+                    tags:
+                        - Books
+                    summary: Add a new book
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    $ref: '#/components/schemas/BookRequestTransfer'
+                                    type: object
+                    responses:
+                        '200':
+                            description: OK
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        $ref: '#/components/schemas/BookResponseData'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        $ref: '#/components/schemas/UnauthorizedErrorTransfer'
+                        '400':
+                            description: Invalid JSON.
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        $ref: '#/components/schemas/ErrorTransfer'
+                        '422':
+                            description: Unprocessable entity.
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        $ref: '#/components/schemas/ValidationErrorTransfer'
+                        '500':
+                            description: Internal Server Error.
+            /api/v1/book/{uuid}:
+                patch:
+                    tags:
+                        - Books
+                    summary: Modify a new book
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    $ref: '#/components/schemas/BookRequestTransfer'
+                                    type: object
+                    responses:
+                        '200':
+                            description: OK
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        $ref: '#/components/schemas/BookResponseData'
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        $ref: '#/components/schemas/UnauthorizedErrorTransfer'
+                        '400':
+                            description: Invalid JSON.
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        $ref: '#/components/schemas/ErrorTransfer'
+                        '500':
+                            description: Internal Server Error.
+
+            /api/v1/remove-book/{uuid}:
+                delete:
+                    tags:
+                        - Books
+                    summary: Delete new book
+                    responses:
+                        '204':
+                            description: No Content
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        $ref: '#/components/schemas/UnauthorizedErrorTransfer'
+                        '400':
+                            description: Invalid JSON.
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        $ref: '#/components/schemas/ErrorTransfer'
+                        '500':
+                            description: Internal Server Error.
+
     areas: # to filter documented areas
         path_patterns:
-            - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
+            - ^/api(?!/doc$)
