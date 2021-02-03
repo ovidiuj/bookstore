@@ -74,7 +74,7 @@ Libraries:
   >  docker-compose exec -T php ./setup.sh
   > ```
    
-* Open `http://localhost/doc/api` in your favorite web browser. This is the documentation for all API endpoints.
+* Open `http://localhost/doc/api` in your favorite web browser. This is the OpenAPI (Swagger) documentation for all API endpoints.
 * Open `http://localhost/book` in your favorite web browser. This is web client interface.
 
 ## Usage example
