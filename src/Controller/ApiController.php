@@ -70,7 +70,7 @@ class ApiController extends AbstractController
         }
     }
 
-    #[Route("/book/{uuid}", name: "api_edit_book", methods: ["PATCH"])]
+    #[Route("/book/{uuid}/edit", name: "api_edit_book", methods: ["PATCH"])]
     public function editBook(Request $request, EditBookRequestTransfer $editBookRequestTransfer): Response
     {
         try {
@@ -88,13 +88,31 @@ class ApiController extends AbstractController
         }
     }
 
-    #[Route("/remove-book/{uuid}", name: "api_delete_book", methods: ["DELETE"])]
+    #[Route("/book/{uuid}/remove", name: "api_delete_book", methods: ["DELETE"])]
     public function deleteBook(Request $request): Response
     {
         try {
             $this->bookService->deleteBook($request->get('uuid'));
 
             return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
+        } catch (ConflictHttpException $exception) {
+            $this->apiResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
+
+            return $this->apiResponse->buildErrorResponse($exception->getMessage());
+        } catch (\Exception | \Throwable $exception) {
+            $this->apiResponse->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
+
+            return $this->apiResponse->buildErrorResponse($exception->getMessage());
+        }
+    }
+
+    #[Route("/book/{uuid}", name: "api_view_book", methods: ["GET"])]
+    public function getBook(Request $request): Response
+    {
+        try {
+            $bookTransfer = $this->bookService->getBook($request->get('uuid'));
+
+            return $this->apiResponse->buildJsonResponse($bookTransfer, BookConfig::RESOURCE_NAME);
         } catch (ConflictHttpException $exception) {
             $this->apiResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
 

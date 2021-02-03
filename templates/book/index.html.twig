@@ -19,15 +19,15 @@
             </tr>
         </thead>
         <tbody>
-        {% for book in books %}
+        {% for book in books.data %}
             <tr>
                 <td>{{ book.id }}</td>
-                <td>{{ book.title }}</td>
-                <td>{{ book.cover }}</td>
-                <td>{{ book.description }}</td>
-                <td>{{ book.author }}</td>
-                <td>{{ book.status }}</td>
-                <td>{{ book.createdAt ? book.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ book.attributes.title }}</td>
+                <td>{{ book.attributes.cover }}</td>
+                <td>{{ book.attributes.description }}</td>
+                <td>{{ book.attributes.author }}</td>
+                <td>{{ book.attributes.status }}</td>
+                <td>{{ book.attributes.createdAt ? book.attributes.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
                     <a href="{{ path('book_show', {'id': book.id}) }}">show</a>
                     <a href="{{ path('book_edit', {'id': book.id}) }}">edit</a>

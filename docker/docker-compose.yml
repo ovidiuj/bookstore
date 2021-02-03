@@ -23,7 +23,7 @@ services:
       - XDEBUG_PORT=9003
     volumes:
       - ./../:/var/www
-      - ./php-fpm/config/custom.ini:/usr/local/etc/php/conf.d/custom.ini
+#      - ./php-fpm/config/custom.ini:/usr/local/etc/php/conf.d/custom.ini
 
   nginx:
     build:

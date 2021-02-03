@@ -66,4 +66,5 @@ class BookMapper implements BookMapperInterface
 
         return $book;
     }
+
 }

@@ -9,38 +9,38 @@
         <tbody>
             <tr>
                 <th>Id</th>
-                <td>{{ book.id }}</td>
+                <td>{{ book.data.0.id }}</td>
             </tr>
             <tr>
                 <th>Title</th>
-                <td>{{ book.title }}</td>
+                <td>{{ book.data.0.attributes.title }}</td>
             </tr>
             <tr>
                 <th>Cover</th>
-                <td>{{ book.cover }}</td>
+                <td>{{ book.data.0.attributes.cover }}</td>
             </tr>
             <tr>
                 <th>Description</th>
-                <td>{{ book.description }}</td>
+                <td>{{ book.data.0.attributes.description }}</td>
             </tr>
             <tr>
                 <th>Author</th>
-                <td>{{ book.author }}</td>
+                <td>{{ book.data.0.attributes.author }}</td>
             </tr>
             <tr>
                 <th>Status</th>
-                <td>{{ book.status }}</td>
+                <td>{{ book.data.0.attributes.status }}</td>
             </tr>
             <tr>
                 <th>CreatedAt</th>
-                <td>{{ book.createdAt ? book.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ book.data.0.attributes.createdAt ? book.data.0.attributes.createdAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
         </tbody>
     </table>
 
     <a href="{{ path('book_index') }}">back to list</a>
 
-    <a href="{{ path('book_edit', {'id': book.id}) }}">edit</a>
+    <a href="{{ path('book_edit', {'id': book.data.0.id}) }}">edit</a>
 
     {{ include('book/_delete_form.html.twig') }}
 {% endblock %}

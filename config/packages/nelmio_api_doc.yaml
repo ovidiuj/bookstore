@@ -297,11 +297,11 @@ nelmio_api_doc:
                                         $ref: '#/components/schemas/ValidationErrorTransfer'
                         '500':
                             description: Internal Server Error.
-            /api/v1/book/{uuid}:
+            /api/v1/book/{uuid}/edit:
                 patch:
                     tags:
                         - Books
-                    summary: Modify a new book
+                    summary: Modify a book
                     requestBody:
                         content:
                             application/json:
@@ -333,7 +333,7 @@ nelmio_api_doc:
                         '500':
                             description: Internal Server Error.
 
-            /api/v1/remove-book/{uuid}:
+            /api/v1/book/{uuid}/remove:
                 delete:
                     tags:
                         - Books
@@ -341,6 +341,35 @@ nelmio_api_doc:
                     responses:
                         '204':
                             description: No Content
+                        '401':
+                            description: Unauthorized
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        $ref: '#/components/schemas/UnauthorizedErrorTransfer'
+                        '400':
+                            description: Invalid JSON.
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        $ref: '#/components/schemas/ErrorTransfer'
+                        '500':
+                            description: Internal Server Error.
+            /api/v1/book/{uuid}:
+                get:
+                    tags:
+                        - Books
+                    summary: Get book details
+                    responses:
+                        '200':
+                            description: OK
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        $ref: '#/components/schemas/BookResponseData'
                         '401':
                             description: Unauthorized
                             content:

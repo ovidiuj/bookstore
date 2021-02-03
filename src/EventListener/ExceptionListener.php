@@ -2,8 +2,10 @@
 
 namespace App\EventListener;
 
+use App\Services\HttpClientService\HttpClientServiceException;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -13,6 +15,7 @@ use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -88,6 +91,7 @@ class ExceptionListener
                 );
                 break;
             case $exception instanceof AccessDeniedException:
+            case $exception instanceof ClientException:
                 $event->setResponse(
                     new JsonResponse(
                         ['message' => $exception->getMessage()],
@@ -97,6 +101,7 @@ class ExceptionListener
                 break;
             case $exception instanceof HttpException:
             case $exception instanceof AccessDeniedHttpException:
+            case $exception instanceof HttpClientServiceException:
                 if (
                     $exception->getStatusCode() === Response::HTTP_UNAUTHORIZED ||
                     $exception->getStatusCode() === Response::HTTP_FORBIDDEN

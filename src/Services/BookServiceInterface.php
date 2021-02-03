@@ -16,4 +16,6 @@ interface BookServiceInterface
     public function editBook(string $id, EditBookRequestTransfer $editBookRequestTransfer): BookTransfer;
 
     public function deleteBook(string $uuid): ?BookTransfer;
+
+    public function getBook(string $uuid): ?BookTransfer;
 }

@@ -84,4 +84,18 @@ class BookService implements BookServiceInterface
 
         return null;
     }
+
+    public function getBook(string $uuid): ?BookTransfer
+    {
+        $bookEntity = $this->bookRepository->findOneByUuid($uuid);
+        if ($bookEntity === null) {
+            throw new ConflictHttpException('A book with provided id does not exist.');
+        }
+
+        if ($bookEntity->getStatus() !== Book::STATUS_PUBLIC) {
+            throw new ConflictHttpException('A not-public book can\'t be fetched.');
+        }
+
+        return $this->bookMapper->mapBookEntityToBookResponseTransfer($bookEntity);
+    }
 }
