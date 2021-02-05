@@ -35,7 +35,7 @@ class ApiController extends AbstractController
 
 
     #[Route("/books", name: "api_books_list", methods: ["GET"])]
-    public function getBooksAction(Request $request): Response
+    public function getBooks(Request $request): Response
     {
         try {
             $books = $this->bookService->findAllAvailableBooks($request);
