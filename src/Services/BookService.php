@@ -46,9 +46,7 @@ class BookService implements BookServiceInterface
     public function addBook(BookRequestTransfer $bookRequestTransfer): BookTransfer
     {
         $bookEntity = $this->bookMapper->mapBookEntityFromBookRequestTransfer(new Book(), $bookRequestTransfer);
-
-        $this->entityManager->persist($bookEntity);
-        $this->entityManager->flush();
+        $this->bookRepository->saveBook($bookEntity);
 
         return $this->bookMapper->mapBookEntityToBookResponseTransfer($bookEntity);
     }
@@ -61,9 +59,7 @@ class BookService implements BookServiceInterface
         }
 
         $bookEntity = $this->bookMapper->mapBookEntityFromEditBookRequestTransfer($bookEntity, $editBookRequestTransfer);
-
-        $this->entityManager->persist($bookEntity);
-        $this->entityManager->flush();
+        $this->bookRepository->saveBook($bookEntity);
 
         return $this->bookMapper->mapBookEntityToBookResponseTransfer($bookEntity);
     }
@@ -79,8 +75,7 @@ class BookService implements BookServiceInterface
             throw new ConflictHttpException('A public book can\'t be deleted.');
         }
 
-        $this->entityManager->remove($bookEntity);
-        $this->entityManager->flush();
+        $this->bookRepository->deleteBook($bookEntity);
 
         return null;
     }

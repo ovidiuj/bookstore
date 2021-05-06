@@ -61,4 +61,16 @@ class BookRepository extends ServiceEntityRepository implements BookRepositoryIn
             ->getOneOrNullResult()
             ;
     }
+
+    public function saveBook(Book $book): void
+    {
+        $this->getEntityManager()->persist($book);
+        $this->getEntityManager()->flush();
+    }
+
+    public function deleteBook(Book $book): void
+    {
+        $this->getEntityManager()->remove($book);
+        $this->getEntityManager()->flush();
+    }
 }

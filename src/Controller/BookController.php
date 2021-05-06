@@ -4,8 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Book;
 use App\Form\BookType;
-use App\Mapper\BookMapperInterface;
-use App\Repository\BookRepository;
 use App\Services\HttpClientService\ClientBookMapperInterface;
 use App\Services\HttpClientService\HttpClientServiceTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -118,8 +116,6 @@ class BookController extends AbstractController
             $this->getParameter('api.host') . $this->apiUrl . 'book/' . $request->get('id') . '/remove',
             $this->getUserToken()
         );
-
-        print_r($res);exit;
 
         return $this->redirectToRoute('book_index');
     }
